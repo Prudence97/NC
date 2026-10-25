@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Startup Naija</title>
+<style>
+:root{
+  --navy:#0b1f3a;--navy2:#143561;--green:#0a3d2e;--bright:#19c37d;--bright-d:#0f9d61;
+  --amber:#f5a524;--red:#e5484d;--cream:#fff6e5;--card:#ffffff;--ink:#14213d;--muted:#5b6b82;
+  --orange:#ff8a3d;--line:#eadfc8;--yellow:#ffd43b;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);
+  background:linear-gradient(180deg,#fff0d4 0%,var(--cream) 220px,#fff9ef 100%);min-height:100vh;line-height:1.45;font-size:16px}
+#app{max-width:1100px;margin:0 auto;padding:12px 14px 60px}
+button{font:inherit;cursor:pointer}
+.danfo{height:10px;border-radius:6px;background:repeating-linear-gradient(90deg,var(--yellow) 0 22px,#111 22px 30px);margin:6px 0 12px}
+
+/* header */
+.top{background:linear-gradient(135deg,var(--navy),var(--green));color:#fff;border-radius:20px;padding:14px 16px;
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;box-shadow:0 6px 18px rgba(11,31,58,.25)}
+.logo{font-weight:900;letter-spacing:2px;font-size:1.25rem}
+.logo small{display:block;font-weight:600;letter-spacing:0;font-size:.75rem;opacity:.8}
+.pill{background:rgba(255,255,255,.14);border-radius:999px;padding:7px 14px;font-weight:700;font-size:.95rem}
+.pill b{color:var(--yellow)}
+.ghost{background:transparent;border:1.5px solid rgba(255,255,255,.45);color:#fff;border-radius:999px;padding:7px 14px;font-weight:600;min-height:40px}
+.ghost:hover{background:rgba(255,255,255,.12)}
+.monthbar{display:flex;gap:4px;margin-top:10px;width:100%}
+.monthbar i{flex:1;height:6px;border-radius:4px;background:rgba(255,255,255,.2)}
+.monthbar i.done{background:var(--bright)}.monthbar i.now{background:var(--yellow)}
+
+/* company/cash */
+.company{display:grid;grid-template-columns:1fr;gap:12px;margin:14px 0}
+.card{background:var(--card);border-radius:20px;padding:16px;border:1px solid var(--line);box-shadow:0 3px 10px rgba(80,60,20,.07)}
+.card h3{margin:0 0 10px;font-size:1rem;color:var(--navy);display:flex;align-items:center;gap:8px}
+.bizname{display:flex;gap:12px;align-items:center}
+.bizicon{font-size:2.4rem;background:linear-gradient(135deg,#e8fff4,#fff3d6);border-radius:18px;width:64px;height:64px;display:flex;align-items:center;justify-content:center;flex:none}
+.bizname h2{margin:0;font-size:1.4rem;color:var(--navy)}
+.bizname p{margin:2px 0 0;color:var(--muted);font-size:.9rem}
+.cash{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border:none}
+.cash .label{opacity:.8;font-size:.85rem;text-transform:uppercase;letter-spacing:1px}
+.cash .amt{font-size:2.1rem;font-weight:900;margin:2px 0}
+.cash .amt.low{color:#ffb3b5}.cash .amt.mid{color:#ffd78a}.cash .amt.ok{color:#9af2c8}
+.cash .sub{opacity:.85;font-size:.85rem}
+
+/* dashboard grid */
+.grid{display:grid;grid-template-columns:1fr;gap:12px}
+.stat{margin-bottom:12px}
+.stat .row{display:flex;justify-content:space-between;font-weight:600;font-size:.92rem;margin-bottom:4px}
+.bar{height:14px;background:#efe6d3;border-radius:999px;overflow:hidden}
+.bar span{display:block;height:100%;border-radius:999px;transition:width .4s}
+.bar .g{background:linear-gradient(90deg,var(--bright),#6be3b0)}.bar .a{background:linear-gradient(90deg,var(--amber),#ffd27a)}.bar .r{background:linear-gradient(90deg,var(--red),#ff8a8e)}
+.equity{display:flex;justify-content:space-between;align-items:center;background:#f2f8ff;border-radius:14px;padding:10px 12px;font-weight:700}
+.equity b{font-size:1.2rem;color:var(--navy)}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.metric{background:#faf5e9;border-radius:14px;padding:9px 11px}
+.metric small{display:block;color:var(--muted);font-size:.74rem;line-height:1.2}
+.metric b{font-size:1.1rem;color:var(--navy)}
+.metric b.nm{font-size:.82rem;color:var(--muted);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chip{border-radius:999px;padding:5px 11px;font-size:.82rem;font-weight:700;display:inline-flex;gap:5px;align-items:center}
+.chip.red{background:#ffe3e4;color:#a4161a}.chip.amber{background:#fff0d1;color:#8a5a00}.chip.green{background:#dcf8ea;color:#0a6b41}.chip.grey{background:#ecebe7;color:#555}
+.mini{font-size:.8rem;color:var(--muted);margin:2px 0 6px;font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+details{background:#faf5e9;border-radius:14px;padding:8px 12px;margin-top:8px}
+summary{cursor:pointer;font-weight:700;color:var(--navy);min-height:28px}
+.eff{padding:8px 0;border-top:1px dashed var(--line)}
+.eff:first-of-type{border-top:none}
+.eff b{font-size:.92rem}.eff p{margin:2px 0;font-size:.82rem;color:var(--muted)}
+.badge{font-size:.7rem;border-radius:6px;padding:2px 7px;margin-left:6px;font-weight:800;text-transform:uppercase}
+.badge.active{background:#ffe3e4;color:#a4161a}.badge.resolved,.badge.unlocked{background:#dcf8ea;color:#0a6b41}.badge.faded{background:#ecebe7;color:#555}
+
+/* challenge */
+.challenge{margin-top:14px;background:linear-gradient(135deg,#fffdf6,#fff3d9);border:2px solid var(--yellow)}
+.scene{font-size:2rem;letter-spacing:6px;margin-bottom:4px}
+.challenge h2{margin:0 0 6px;color:var(--navy);font-size:1.3rem}
+.challenge p{margin:6px 0}
+.facts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.decisions{display:grid;grid-template-columns:1fr;gap:12px;margin-top:14px}
+.dcard{display:flex;flex-direction:column;gap:8px;border:2px solid var(--line);transition:transform .15s,border-color .15s}
+.dcard:hover{border-color:var(--bright);transform:translateY(-2px)}
+.dcard.off{opacity:.6}.dcard.off:hover{transform:none;border-color:var(--line)}
+.dcard .em{font-size:2rem}
+.dcard h4{margin:0;font-size:1.08rem;color:var(--navy)}
+.dcard p{margin:0;font-size:.92rem;color:#33415c}
+.cost{font-weight:800;color:var(--navy);background:#eef3fb;border-radius:10px;padding:6px 10px;font-size:.92rem}
+.gain{font-size:.85rem;color:#0a6b41;background:#e8faf1;border-radius:10px;padding:6px 10px}
+.risk{font-size:.85rem;color:#8a4b00;background:#fff3dc;border-radius:10px;padding:6px 10px}
+.why{font-size:.83rem;color:#a4161a;font-weight:700}
+.btn{background:linear-gradient(135deg,var(--bright),var(--bright-d));color:#fff;border:none;border-radius:14px;padding:14px 18px;font-weight:800;font-size:1rem;min-height:50px;width:100%;box-shadow:0 4px 0 #0a7a4a}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 #0a7a4a}
+.btn:disabled{background:#c9c4b6;box-shadow:none;cursor:not-allowed}
+.btn.navy{background:linear-gradient(135deg,var(--navy2),var(--navy));box-shadow:0 4px 0 #050f1d}
+.btn.light{background:#fff;color:var(--navy);border:2px solid var(--navy);box-shadow:none}
+.dcard .btn{margin-top:auto}
+
+/* result */
+.result h2{margin:0 0 6px;color:var(--navy)}
+.narr{font-size:1.02rem;margin:8px 0}
+.ledger{width:100%;border-collapse:collapse;font-size:.92rem}
+.ledger td{padding:6px 4px;border-bottom:1px dashed var(--line)}
+.ledger td:last-child{text-align:right;font-weight:700;white-space:nowrap}
+.ledger tr.sum td{border-bottom:2px solid var(--navy);font-weight:800}
+.ledger .in{color:#0a6b41}.ledger .out{color:#a4161a}
+.delta{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line);font-size:.93rem}
+.delta b.up{color:#0a6b41}.delta b.down{color:#a4161a}.delta b.flat{color:var(--muted)}
+.funnel{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.9rem;font-weight:700}
+.funnel span.box{background:#eef3fb;border-radius:10px;padding:6px 10px}
+.warn{background:#ffe3e4;color:#8f1519;border-radius:12px;padding:10px 12px;font-weight:700;margin:8px 0}
+.note{background:#fff3dc;border-radius:12px;padding:10px 12px;margin:8px 0;font-size:.92rem}
+.two{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
+
+/* welcome / end */
+.welcome{text-align:center;padding:26px 16px;background:linear-gradient(160deg,var(--navy),var(--green));color:#fff;border-radius:26px;margin-top:10px;box-shadow:0 10px 30px rgba(11,31,58,.3)}
+.welcome h1{font-size:clamp(2.2rem,9vw,4rem);letter-spacing:4px;margin:6px 0;font-weight:900}
+.welcome .sub{font-size:1.15rem;opacity:.92;margin-bottom:16px}
+.welcome .skyline{font-size:2rem;letter-spacing:8px}
+.idea{background:rgba(255,255,255,.12);border-radius:18px;padding:14px;max-width:520px;margin:14px auto;text-align:left}
+.idea b{color:var(--yellow)}
+.idea input{width:100%;font:inherit;font-size:1.05rem;padding:12px;border-radius:12px;border:2px solid transparent;margin-top:6px;min-height:48px}
+.how{max-width:520px;margin:10px auto 18px;text-align:left;font-size:.93rem;opacity:.95}
+.welcome .btn{max-width:520px}
+.end{text-align:center}
+.endbanner{background:linear-gradient(135deg,var(--navy),var(--green));color:#fff;border-radius:22px;padding:22px 14px}
+.endbanner .big{font-size:3rem}
+.endbanner h2{margin:4px 0;font-size:1.8rem}
+.rep{display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:left}
+.rep .metric b{font-size:1rem}
+.list{text-align:left;margin:6px 0;padding-left:20px}
+.list li{margin:5px 0}
+.actions{display:grid;gap:10px;grid-template-columns:1fr;margin-top:14px}
+.copymsg{margin-top:8px;font-weight:700}
+.copymsg.ok{color:#0a6b41}.copymsg.bad{color:#a4161a}
+textarea.rt{width:100%;min-height:150px;font:inherit;font-size:.85rem;border-radius:12px;border:1px solid var(--line);padding:10px;margin-top:8px}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(5,15,29,.65);display:flex;align-items:center;justify-content:center;padding:18px;z-index:50}
+.modal .box{background:#fff;border-radius:22px;padding:20px;max-width:420px;width:100%}
+.modal h3{margin:0 0 8px;color:var(--navy)}
+.modal .row{display:grid;gap:10px;grid-template-columns:1fr 1fr;margin-top:14px}
+.modal .btn.danger{background:linear-gradient(135deg,#ef5a5e,var(--red));box-shadow:0 4px 0 #a82d31}
+
+@media(min-width:760px){
+  .company{grid-template-columns:1.4fr 1fr}
+  .grid{grid-template-columns:1fr 1fr 1fr}
+  .decisions{grid-template-columns:repeat(3,1fr)}
+  .two{grid-template-columns:1fr 1fr}
+  .actions{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+"use strict";
+/* =====================================================================
+   STARTUP NAIJA — game data, decision logic, rendering
+   Sections: 1) constants & helpers  2) state  3) ledger  4) effects
+             5) monthly engine  6) rounds & options  7) events
+             8) endings & report  9) save/restore  10) rendering
+   ===================================================================== */
+
+/* ---------- 1) constants & helpers ---------- */
+const MAX_MONTH = 10;
+const SAVE_KEY = "startupNaija.v1";
+const START_CASH = 2000000;
+const CFG = { opBase: 70000, cofounderStipend: 40000, fundedBurn: 50000, seedAmount: 2000000, grantAmount: 700000,
+  payTarget: 50, revTarget: 150000 };
+const MODELS = {
+  subscription: { name: "Subscription", price: 3500, conv: 1.0, perMau: 0, label: "₦3,500 per paying shop per month" },
+  freemium:     { name: "Freemium + sponsored listings", price: 1800, conv: 1.6, perMau: 30, label: "₦1,800 premium plan + ₦30 sponsored-listing income per active user" },
+  commission:   { name: "Transaction commission", price: 2400, conv: 1.3, perMau: 0, label: "about ₦2,400 per selling merchant per month in commission" }
+};
+const EFFECTS = {
+  techDebt:        { name: "Growing Technical Debt", icon: "🧱", type: "risk",
+    text: "Rushed code is piling up.", mech: "Development costs +25%, product quality slips 1 point a month and bugs become more likely. Only repair work clears it." },
+  featureCoverage: { name: "Better Feature Coverage", icon: "🧩", type: "boost",
+    text: "Important features are shipped.", mech: "Each feature cuts development costs by 5% (up to 3) and lifts activation and conversion." },
+  firstPaying:     { name: "First Paying Customers", icon: "💸", type: "boost",
+    text: "Real shops pay real money.", mech: "Subscription revenue starts arriving each month and unlocks investor interest and revenue choices." },
+  churnRisk:       { name: "Subscription Churn Risk", icon: "📉", type: "risk",
+    text: "Weak product experience is making paying customers cancel.", mech: "About 14% of paying customers cancel each month (4% normally) and cancellation events are more likely." },
+  funded:          { name: "Funded Startup", icon: "🏦", type: "boost",
+    text: "You took outside investment.", mech: "Unlocks bigger growth options, but the larger team adds ₦50,000 to monthly costs." },
+  investorExpect:  { name: "Investor Expectations", icon: "📈", type: "risk",
+    text: "Investors want visible progress.", mech: "If active users grow less than 8% in a month, investor confidence drops. Meet the 'Investor update' targets to resolve it." },
+  growthMomentum:  { name: "Growth Momentum", icon: "🚀", type: "boost",
+    text: "A successful acquisition push created buzz.", mech: "New sign-ups from your next acquisition decisions are 25% higher. Fades after two months." },
+  retentionPressure:{ name: "Retention Pressure", icon: "🪣", type: "risk",
+    text: "Many registered users never come back.", mech: "Returning-user rate drops, and customer trust falls 2 points a month until you fix retention." },
+  analytics:       { name: "Product Analytics", icon: "📊", type: "boost",
+    text: "You can now see onboarding, activation and conversion.", mech: "Onboarding and retention fixes cost 20% less because you know exactly where users drop off." },
+  onboarding:      { name: "Guided Onboarding", icon: "🧭", type: "boost",
+    text: "A guided path from sign-up to first sale.", mech: "More sign-ups become active users (+12 points), returning users rise and conversion improves." }
+};
+const STAT_META = [
+  { k: "quality", label: "Product quality", icon: "🛠️" },
+  { k: "trust", label: "Customer trust", icon: "🤝" },
+  { k: "morale", label: "Team morale", icon: "💪" },
+  { k: "investor", label: "Investor confidence", icon: "💼" }
+];
+const ACHIEVEMENTS = [
+  { id: "first_customer", icon: "🥇", name: "First paying customer", test: S => S.paying >= 1 },
+  { id: "users100", icon: "👥", name: "100 active users", test: S => S.mau >= 100 },
+  { id: "thousand", icon: "📣", name: "1,000 sign-ups", test: S => S.registered >= 1000 },
+  { id: "funded", icon: "🏦", name: "Funded founder", test: S => S.effects.funded === "active" || S.flags.funded },
+  { id: "clean", icon: "✨", name: "Technical debt cleared", test: S => S.effects.techDebt === "resolved" },
+  { id: "cashflow", icon: "💰", name: "Revenue beat monthly costs", test: S => S.revenueThisMonth >= opCost(S) && S.revenueThisMonth > 0 },
+  { id: "trusted", icon: "🤝", name: "Trusted brand (75+)", test: S => S.trust >= 75 },
+  { id: "spirit", icon: "🎉", name: "Team spirit (85+)", test: S => S.morale >= 85 }
+];
+
+const clamp = (n, a, b) => Math.min(b, Math.max(a, n));
+const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+const roundK = n => Math.round(n / 1000) * 1000;
+const money = n => (n < 0 ? "−" : "") + "₦" + Math.abs(Math.round(n)).toLocaleString("en-US");
+const signed = n => (n > 0 ? "+" : n < 0 ? "−" : "") + Math.abs(Math.round(n * 10) / 10);
+const pct = n => Math.round(n) + "%";
+function esc(s) { return String(s).replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m])); }
+const val = (x, S) => (typeof x === "function" ? x(S) : x);
+
+/* ---------- 2) state ---------- */
+let state = null;       // the single game-state object
+let busy = false;       // blocks double-clicks while a decision resolves
+const ui = { modal: false, copyMsg: "", copyOk: null, showText: false };
+
+function startNewGame(companyName) {
+  const name = (companyName || "").trim().slice(0, 24) || "NaijaCart";
+  state = {
+    v: 1, phase: "decision", month: 1, company: name,
+    idea: "A digital platform that helps small Nigerian retailers sell products online.",
+    cash: START_CASH,
+    quality: 50, trust: 40, morale: 70, investor: 30, equity: 100,
+    registered: 0, mau: 0, returning: 0, paying: 0, activatedTotal: 0,
+    revenueThisMonth: 0, retentionRate: null, measuredReturning: false,
+    model: null, price: 0, debt: 0, features: 0, launched: false,
+    totalRevenue: 0, totalSpent: 0, totalFunding: 0,
+    opExtra: 0, momentumLeft: 0, fundedMonth: 0,
+    effects: {}, flags: {}, achievements: [],
+    history: [], decisions: [], eventLog: [],
+    currentEvent: null, result: null,
+    gameOver: false, crisis: false, ending: null
+  };
+  startMonth(state);
+  saveGame();
+  render();
+}
+
+function startMonth(S) { S.currentEvent = { month: S.month, eventId: pickEvent(S) }; S.result = null; S.phase = "decision"; }
+
+function opCost(S) {
+  let c = CFG.opBase + S.opExtra;
+  if (S.flags.cofounder) c += CFG.cofounderStipend;
+  if (S.effects.funded === "active") c += CFG.fundedBurn;
+  return Math.max(30000, c);
+}
+function expectedRevenueBase(S) {
+  const m = S.model ? MODELS[S.model] : null;
+  return S.paying * S.price + (m ? S.mau * m.perMau : 0);
+}
+function reserve(S) { return opCost(S) + 60000; }
+function valuation(S) {
+  const v = 3000000 + S.mau * 6000 + S.paying * 40000 + S.investor * 40000 + S.quality * 20000 + S.revenueThisMonth * 24;
+  return Math.round(v / 10000) * 10000;
+}
+function activationRate(S, bonus) {
+  const r = 0.32 + (S.quality - 50) / 180 + (S.effects.onboarding === "unlocked" ? 0.12 : 0) + Math.min(S.features, 3) * 0.02
+    + (S.flags.validated ? 0.03 : 0) - (S.flags.competitor ? 0.02 : 0) - S.debt * 0.01 + (bonus || 0);
+  return clamp(r, 0.08, 0.7);
+}
+function costOf(S, o) {
+  const b = val(o.base, S) || 0;
+  if (!b) return 0;
+  let m = 1;
+  if (o.kind === "dev") { if (S.debt > 0) m *= 1.25; m *= 1 - 0.05 * Math.min(S.features, 3); }
+  if (o.kind === "marketing" && S.flags.cacUp) m *= 1.2;
+  if (o.discountable && S.effects.analytics === "unlocked") m *= 0.8;
+  return roundK(b * m);
+}
+function disabledReason(S, o, cost) {
+  if (o.requires) { const r = o.requires(S); if (r) return r; }
+  if (cost > 0) {
+    const minRev = Math.floor(expectedRevenueBase(S) * 0.8);
+    if (cost + reserve(S) > S.cash + minRev) return "Not enough cash — keep " + money(reserve(S)) + " back for payroll, power and data.";
+  }
+  return null;
+}
+function getOptions(S) {
+  const opts = ROUNDS[S.month - 1].options(S).map(o => {
+    const cost = costOf(S, o);
+    return Object.assign({}, o, { cost, reason: disabledReason(S, o, cost) });
+  });
+  if (opts.every(o => o.reason)) {
+    opts.push({ id: "holdline", emoji: "🕯️", title: "Keep the lights on", cost: 0, reason: null, kind: "other", base: 0,
+      desc: "Every option is out of reach. Spend nothing, hold the team together and wait for payments.",
+      gain: "Keeps what cash you have.", risk: "Team morale drops; nothing improves.",
+      apply(S2, c) { c.stat("morale", -3); return "You pause everything but the essentials. The team grumbles, but the lights stay on and nobody is owed money."; } });
+  }
+  return opts;
+}
+
+/* ---------- 3) ledger (cash accounting) ---------- */
+function newLedger(S) { return { opening: S.cash, items: [], received: 0, spent: 0, unpaid: 0, closing: S.cash }; }
+function calculateCashBalance(L, S) {
+  // Closing cash = Opening cash + Cash received − Cash spent
+  L.closing = L.opening + L.received - L.spent;
+  if (L.closing !== S.cash || L.closing < 0 || !Number.isFinite(L.closing)) throw new Error("Cash does not reconcile");
+  return L.closing;
+}
+
+/* ---------- 4) context object used while resolving a month ---------- */
+function makeCtx(S) {
+  const c = {
+    S, L: newLedger(S), phase: "decision", notes: [], effectChanges: [], later: [], momentumSet: false,
+    newActive: 0, reactivated: 0, cancel: 0, extraChurn: 0, convBoost: 1, revMult: 1, returnPenalty: 0, revenueLost: 0,
+    funnel: { regs: 0, activated: 0, newPaying: 0, churned: 0 }, decisionSpend: 0, decisionReceive: 0,
+    spend(label, amt, cat) {
+      amt = Math.max(0, Math.round(amt)); if (!amt) return 0;
+      const pay = Math.min(amt, S.cash);
+      S.cash -= pay; c.L.spent += pay; S.totalSpent += pay;
+      if (c.phase === "decision") c.decisionSpend += pay;
+      const short = amt - pay; c.L.unpaid += short;
+      c.L.items.push({ label, amount: pay, type: "out", cat: cat || "other", unpaid: short });
+      return amt;
+    },
+    receive(label, amt, cat) {
+      amt = Math.max(0, Math.round(amt)); if (!amt) return 0;
+      S.cash += amt; c.L.received += amt;
+      if (cat === "revenue") S.totalRevenue += amt;
+      if (cat === "funding" || cat === "grant") S.totalFunding += amt;
+      if (c.phase === "decision") c.decisionReceive += amt;
+      c.L.items.push({ label, amount: amt, type: "in", cat: cat || "other" });
+      return amt;
+    },
+    stat(k, d) { S[k] = clamp(Math.round(S[k] + d), 0, 100); },
+    regs(n, bonus, o) {
+      o = o || {}; let k = Math.round(n);
+      if (!o.organic && S.effects.growthMomentum === "active" && !c.momentumSet) {
+        k = Math.round(k * 1.25); c.notes.push("Growth Momentum boosted these sign-ups by 25%.");
+      }
+      if (S.flags.competitor && !o.organic) k = Math.round(k * 0.9);
+      const act = Math.round(k * activationRate(S, bonus));
+      S.registered += k; S.activatedTotal += act; c.newActive += act; c.funnel.regs += k; c.funnel.activated += act;
+      return k;
+    },
+    momentum() { c.momentumSet = true; S.momentumLeft = 2; c.setEffect("growthMomentum", "active", "Your acquisition push created buzz."); },
+    repair(n) { const used = Math.min(S.debt, n); S.debt -= used; return used; },
+    setEffect(id, st, why) {
+      if (S.effects[id] !== st) { c.effectChanges.push({ id, from: S.effects[id] || null, to: st, why: why || "" }); S.effects[id] = st; }
+    },
+    dilute(p) { S.equity = Math.max(0, Math.round(S.equity * (1 - p) * 10) / 10); }
+  };
+  return c;
+}
+
+/* ---------- 5) monthly engine ---------- */
+function snapshot(S) {
+  return { quality: S.quality, trust: S.trust, morale: S.morale, investor: S.investor, equity: S.equity, cash: S.cash,
+    registered: S.registered, mau: S.mau, returning: S.returning, paying: S.paying, revenue: S.revenueThisMonth,
+    effects: Object.assign({}, S.effects), retention: S.retentionRate };
+}
+
+function applyDecision(optId) {
+  if (busy) return;
+  const S = state;
+  if (!S || S.phase !== "decision" || S.gameOver) return;
+  if (S.decisions.some(d => d.month === S.month)) return;       // one decision per month
+  const opt = getOptions(S).find(o => o.id === optId);
+  if (!opt || opt.reason) return;
+  busy = true;
+  try {
+    const W = JSON.parse(JSON.stringify(S));                     // work on a copy; commit only if everything succeeds
+    resolveMonth(W, opt, opt.cost);
+    state = W;
+    saveGame();
+  } catch (err) {
+    console.error(err);
+  } finally { busy = false; }
+  render();
+}
+
+function resolveMonth(W, optView, cost) {
+  const opt = optView.id === "holdline" ? optView : ROUNDS[W.month - 1].options(W).find(o => o.id === optView.id);
+  const before = snapshot(W);
+  const c = makeCtx(W);
+  const ev = EVENTS.find(e => e.id === (W.currentEvent && W.currentEvent.eventId)) || null;
+  if (ev && ev.pre) ev.pre(W, c);
+
+  // (1) customer payments arrive first
+  const m = W.model ? MODELS[W.model] : null;
+  const base = expectedRevenueBase(W);
+  c.phase = "revenue";
+  let revenueReceived = 0;
+  if (base > 0) {
+    revenueReceived = Math.round(base * c.revMult);
+    c.revenueLost = base - revenueReceived;
+    const parts = [];
+    if (W.paying > 0) parts.push(W.paying + " paying customers");
+    if (m && m.perMau && W.mau > 0) parts.push("sponsored listings");
+    c.receive("Customer payments (" + parts.join(" + ") + ")", revenueReceived, "revenue");
+  }
+  W.revenueThisMonth = revenueReceived;
+
+  // (2) the player's decision
+  c.phase = "decision";
+  if (cost > 0) c.spend(opt.payLabel || opt.title, cost, opt.cat || "other");
+  const narrative = opt.apply(W, c);
+
+  // (3) the month's Nigerian business event
+  c.phase = "event";
+  let eventOut = null;
+  if (ev) { const text = ev.apply(W, c); eventOut = { id: ev.id, title: ev.title, text }; W.eventLog.push(ev.id); }
+  else W.eventLog.push("none");
+
+  // (4) users, churn, conversion
+  c.phase = "ops";
+  const dyn = runDynamics(W, c);
+
+  // (5) fixed monthly costs
+  const op = opCost(W);
+  const salaries = Math.round(op * 0.6);
+  c.spend("Salaries & stipends", salaries, "salaries");
+  c.spend("Power, data, rent & customer support", op - salaries, "infrastructure");
+
+  // (6) drift, later hooks, persistent effects
+  const driftNotes = statDrift(W, c, dyn);
+  c.later.forEach(fn => fn(W, c));
+  const effectLines = updatePersistentEffects(W, c, before, dyn);
+
+  // (7) achievements
+  const newAch = [];
+  ACHIEVEMENTS.forEach(a => { if (!W.achievements.includes(a.id) && a.test(W)) { W.achievements.push(a.id); newAch.push(a); } });
+
+  // (8) close the books
+  calculateCashBalance(c.L, W);
+  W.crisis = c.L.unpaid > 0;
+  normalize(W);
+  const after = snapshot(W);
+  const statSum = ["quality", "trust", "morale", "investor"].reduce((s, k) => s + Math.abs(after[k] - before[k]), 0);
+  const entry = { month: W.month, id: opt.id, title: opt.title, cost, spend: c.decisionSpend, receive: c.decisionReceive,
+    importance: Math.round(c.decisionSpend / 50000 + c.decisionReceive / 50000 + statSum + (opt.key ? 6 : 0)), summary: narrative };
+  W.decisions.push(entry);
+  W.history.push({ month: W.month, opening: c.L.opening, received: c.L.received, spent: c.L.spent, closing: c.L.closing,
+    revenue: revenueReceived, decision: opt.title });
+  W.result = { month: W.month, title: opt.title, emoji: opt.emoji, narrative, event: eventOut, ledger: c.L, before, after,
+    funnel: Object.assign({}, c.funnel, { churned: dyn.churned, newPaying: dyn.newPaying }), notes: c.notes.concat(driftNotes),
+    effects: effectLines, achievements: newAch.map(a => ({ icon: a.icon, name: a.name })), crisis: W.crisis };
+  W.phase = "result";
+  if (W.month >= MAX_MONTH || W.crisis) W.gameOver = true;
+}
+
+function runDynamics(S, c) {
+  const prevMau = S.mau, prevPaying = S.paying;
+  if (S.launched) {
+    const organic = Math.round(4 + S.trust * 0.15 + S.quality * 0.1 + prevPaying * 0.2);
+    c.regs(organic, 0, { organic: true });
+  }
+  const returnRate = clamp(0.42 + (S.trust - 40) / 220 + (S.quality - 50) / 280 + (S.effects.onboarding === "unlocked" ? 0.1 : 0)
+    - 0.03 * S.debt - (S.effects.retentionPressure === "active" ? 0.05 : 0) - c.returnPenalty, 0.08, 0.75);
+  const returning = Math.round(prevMau * returnRate);
+  S.returning = returning;
+  if (prevMau > 0) S.measuredReturning = true;
+  S.mau = Math.min(S.registered, returning + c.newActive + c.reactivated);
+  S.activatedTotal += c.reactivated;
+
+  const churnRate = clamp((S.effects.churnRisk === "active" ? 0.14 : 0.04) + c.extraChurn, 0, 0.6);
+  const churned = Math.min(prevPaying, Math.round(prevPaying * churnRate) + c.cancel);
+  const afterChurn = prevPaying - churned;
+  let newPaying = 0;
+  if (S.model) {
+    const nonPaying = Math.max(0, S.mau - afterChurn);
+    const conv = clamp((0.085 + Math.min(S.features, 3) * 0.012 + (S.trust - 40) / 1200 + (S.effects.onboarding === "unlocked" ? 0.015 : 0))
+      * MODELS[S.model].conv * c.convBoost, 0.005, 0.16);
+    newPaying = Math.min(nonPaying, Math.round(nonPaying * conv));
+  }
+  S.paying = Math.min(S.registered, afterChurn + newPaying);
+  if (prevPaying > 0) S.retentionRate = Math.round((afterChurn / prevPaying) * 100);
+  return { prevMau, prevPaying, churned, newPaying, returning };
+}
+
+function statDrift(S, c, dyn) {
+  const n = [];
+  if (S.debt > 0) { c.stat("quality", -1); n.push("Technical debt: product quality slipped 1 point."); }
+  if (S.morale < 40) { c.stat("quality", -2); n.push("Low morale hurt output: quality −2."); }
+  if (S.morale < 25) { c.stat("trust", -2); n.push("A burnt-out team let customers down: trust −2."); }
+  if (S.effects.retentionPressure === "active") { c.stat("trust", -2); n.push("Retention pressure: customers who don't return lose faith (trust −2)."); }
+  if (S.effects.investorExpect === "active" && S.fundedMonth < S.month) {
+    const growth = dyn.prevMau > 0 ? (S.mau - dyn.prevMau) / dyn.prevMau : 0;
+    if (growth < 0.08) { c.stat("investor", -4); n.push("Investors wanted at least 8% user growth; you delivered " + pct(growth * 100) + ". Confidence −4."); }
+    else { c.stat("investor", 2); n.push("Active users grew " + pct(growth * 100) + ", beating investor expectations. Confidence +2."); }
+  }
+  const runway = S.cash / opCost(S);
+  if (runway < 2 && !S.crisis) { c.stat("morale", -2); n.push("Cash worries: less than two months of fixed costs left, morale −2."); }
+  return n;
+}
+
+function updatePersistentEffects(S, c, before, dyn) {
+  const E = S.effects;
+  if (S.debt > 0 && E.techDebt !== "active") c.setEffect("techDebt", "active", "Shortcuts left technical debt behind.");
+  else if (S.debt <= 0 && E.techDebt === "active") c.setEffect("techDebt", "resolved", "Repair work cleared the debt.");
+  if (S.features >= 1 && E.featureCoverage !== "unlocked") c.setEffect("featureCoverage", "unlocked", "You shipped features customers asked for.");
+  if (S.paying >= 1 && !E.firstPaying) c.setEffect("firstPaying", "unlocked", "You have paying customers.");
+  if (S.paying >= 1 && (S.quality < 55 || S.trust < 40 || S.debt >= 2) && E.churnRisk !== "active")
+    c.setEffect("churnRisk", "active", "Quality or trust is too low to keep paying customers happy.");
+  if (S.month >= 6 && S.launched && S.registered >= 300 && S.mau / S.registered < 0.22 && E.retentionPressure !== "active")
+    c.setEffect("retentionPressure", "active", "Under 22% of registered users are active.");
+  if (S.momentumLeft > 0 && !c.momentumSet) {
+    S.momentumLeft -= 1;
+    if (S.momentumLeft === 0) c.setEffect("growthMomentum", "faded", "The buzz has faded.");
+  }
+  // describe every effect for the result screen
+  const lines = [];
+  Object.keys(E).forEach(id => {
+    const st = E[id], meta = EFFECTS[id];
+    const ch = c.effectChanges.filter(x => x.id === id).pop();
+    let note = "";
+    if (id === "techDebt") note = st === "active" ? "Still active: repairs cost +25% and quality slipped 1 point this month." : "Resolved by repair work. Costs are back to normal.";
+    if (id === "featureCoverage") note = S.features + " feature(s) shipped: development costs −" + Math.min(S.features, 3) * 5 + "%.";
+    if (id === "firstPaying") note = S.paying + " paying customers now. Retention: " + (S.retentionRate == null ? "not yet measured" : S.retentionRate + "% kept") + ".";
+    if (id === "churnRisk") note = st === "active" ? "Still active: ~14% of paying customers cancel monthly (" + dyn.churned + " cancelled this month)." : "Resolved: quality and trust recovered after your fix. Cancellations are back to normal.";
+    if (id === "funded") note = "Funded: the bigger team adds " + money(CFG.fundedBurn) + " a month to your costs.";
+    if (id === "investorExpect") note = st === "active" ? "Still active: investors expect 8%+ monthly user growth." : "Resolved: you met the investor targets.";
+    if (id === "growthMomentum") note = st === "active" ? S.momentumLeft + " more month(s) of +25% sign-ups from acquisition pushes." : "Faded.";
+    if (id === "retentionPressure") note = st === "active" ? "Still active: only " + pct(S.registered ? S.mau / S.registered * 100 : 0) + " of registered users are active; trust −2 a month." : "Resolved: re-engagement worked and active share recovered.";
+    if (id === "analytics") note = "Unlocked: onboarding and retention fixes cost 20% less.";
+    if (id === "onboarding") note = "Unlocked: more sign-ups activate and more users return.";
+    lines.push({ id, name: meta.name, icon: meta.icon, status: st, changed: !!ch, from: ch ? ch.from : null, why: ch ? ch.why : "", note });
+  });
+  return lines;
+}
+
+function normalize(S) {
+  ["quality", "trust", "morale", "investor"].forEach(k => { S[k] = clamp(Math.round(S[k]), 0, 100); });
+  S.equity = clamp(Math.round(S.equity * 10) / 10, 0, 100);
+  S.cash = Math.max(0, Math.round(S.cash));
+  S.registered = Math.max(0, Math.round(S.registered));
+  S.mau = clamp(Math.round(S.mau), 0, S.registered);
+  S.returning = clamp(Math.round(S.returning), 0, S.mau);
+  S.paying = clamp(Math.round(S.paying), 0, S.registered);
+  S.debt = Math.max(0, S.debt);
+}
+
+function continueGame() {
+  const S = state;
+  if (!S || S.phase !== "result" || busy) return;
+  busy = true;
+  try {
+    if (S.gameOver) { S.ending = calculateEnding(S); S.phase = "ended"; }
+    else { S.month += 1; startMonth(S); }
+    saveGame();
+  } finally { busy = false; }
+  render();
+}
+
+/* ---------- 6) rounds & options ---------- */
+function facts(S) {
+  const f = [];
+  f.push({ t: "Cash covers about " + (S.cash / opCost(S)).toFixed(1) + " months of fixed costs", c: S.cash / opCost(S) < 2 ? "red" : S.cash / opCost(S) < 4 ? "amber" : "green" });
+  if (S.registered > 0) f.push({ t: pct(S.mau / S.registered * 100) + " of sign-ups are active", c: S.mau / S.registered < 0.22 ? "amber" : "green" });
+  if (S.paying > 0) f.push({ t: S.paying + " paying customers", c: "green" });
+  if (S.effects.techDebt === "active") f.push({ t: "Technical debt is active", c: "red" });
+  return f;
+}
+const chance = p => (p >= 0.65 ? "good odds" : p >= 0.4 ? "fair odds" : "long shot");
+function pitchChance(S) {
+  return clamp(0.10 + S.investor / 200 + Math.min(S.paying, 40) / 160 + (S.mau >= 100 ? 0.08 : 0) + (S.quality >= 60 ? 0.07 : 0)
+    + (S.flags.termSheet ? 0.2 : 0) + (S.flags.investorInterest ? 0.08 : 0), 0.1, 0.9);
+}
+function seedTerms(S) {
+  const pre = valuation(S) * (S.flags.termSheet ? 1.2 : 1);
+  const p = CFG.seedAmount / (pre + CFG.seedAmount);
+  return { pre, p };
+}
+
+const ROUNDS = [
+/* ---- Month 1 ---- */
+{ title: "Validate the idea", scene: "🏙️ 🚌 🏪 ☀️",
+  situation: S => ({ headline: "Yaba, 7:40am. Danfo horns, jollof smoke and one big question.",
+    text: "Mama Nkechi runs a provisions shop and still writes orders in a notebook. Your NaijaCart idea feels right, but nobody has actually asked her. You have " + money(S.cash) + " and a laptop that overheats during NEPA light-offs. How do you start?" }),
+  options: S => [
+  { id: "research", emoji: "🔎", title: "Research what shop owners need", kind: "other", base: 120000, cat: "research", payLabel: "Customer research (transport, interviews, data)",
+    desc: "Spend weeks in Yaba, Balogun and Computer Village markets listening to retailers before you write code.",
+    gain: "Better product-market fit: +trust, +quality clarity, higher activation later.", risk: "No product yet; the clock keeps ticking.",
+    apply(S, c) { c.stat("trust", 3); c.stat("quality", 3); c.stat("morale", 2); S.flags.validated = true;
+      return "You sit with fifty shop owners. The pattern is clear: they want WhatsApp-friendly catalogues and bank-transfer confirmation, not fancy dashboards. You now know what to build."; } },
+  { id: "buildnow", emoji: "⚡", title: "Build immediately", kind: "dev", base: 350000, cat: "product", payLabel: "Product development (rushed MVP build)",
+    desc: "Trust your gut. Hire Tunde the freelance developer and ship the first version fast.",
+    gain: "Quality +12, team energised, investors like speed.", risk: "Rushed code creates technical debt; no customer research.",
+    apply(S, c) { c.stat("quality", 12); c.stat("morale", 4); c.stat("investor", 2); S.debt += 1; S.flags.builtFast = true;
+      return "Tunde codes through the weekend on generator power. A working storefront builder appears in four weeks. It works, but shortcuts are everywhere."; } },
+  { id: "cofounder", emoji: "🤝", title: "Recruit a co-founder", kind: "other", base: 60000, cat: "hiring", payLabel: "Recruiting and onboarding a co-founder",
+    desc: "Bring in Ada, an ops-savvy operator, in exchange for 15% of the company and a monthly stipend of ₦40,000.",
+    gain: "Quality +6, morale +8, investor confidence +5.", risk: "Founder equity drops from " + S.equity + "% to " + (Math.round(S.equity * 0.85 * 10) / 10) + "%; monthly costs +₦40,000; co-founder disagreements become possible.",
+    requires: S => (S.flags.cofounder ? "You already have a co-founder." : null),
+    apply(S, c) { c.dilute(0.15); S.flags.cofounder = true; c.stat("quality", 6); c.stat("morale", 8); c.stat("investor", 5);
+      return "Ada joins with sharp operations instincts and a notebook full of supplier contacts. She gets 15% equity, so you now own " + S.equity + "%. The team already feels less lonely."; } }
+] },
+
+/* ---- Month 2 ---- */
+{ title: "Launch the MVP", scene: "🚀 📱 🛒 🌴",
+  situation: S => ({ headline: "Launch month. Your first real shops are waiting.",
+    text: (S.flags.validated ? "Your market research shaped the product, so you know what shops want. " : "You built from instinct, so launch will show what you got right and wrong. ")
+      + (S.debt > 0 ? "Tunde warns that rushed code is already creaking. " : "") + "Choose how you go to market. Remember: sign-ups are not active users, and active users are not paying customers." }),
+  options: S => [
+  { id: "fast", emoji: "🏁", title: "Launch quickly", kind: "dev", base: 150000, cat: "product", payLabel: "Launch costs (hosting, onboarding shops, QA)",
+    desc: "Go live this week with what you have. Hustle first, polish later.",
+    gain: "About 220 sign-ups quickly. Morale +4.", risk: "Quality stays mediocre; adds technical debt; trust −2.",
+    apply(S, c) { S.launched = true; c.stat("quality", 2); c.stat("trust", -2); c.stat("morale", 4); S.debt += 1;
+      const k = c.regs(220, 0); S.flags.launchStyle = "fast";
+      return "NaijaCart goes live with a WhatsApp blast. " + k + " people register. Several hit bugs on the checkout page and quietly leave."; } },
+  { id: "polish", emoji: "💎", title: "Improve quality before launch", kind: "dev", base: 380000, cat: "product", payLabel: "Product development (quality sprint + launch)",
+    desc: "Delay two weeks. Fix the rough edges and add a proper product catalogue before shops see it.",
+    gain: "Quality +14, a feature shipped, investor confidence +2. Pays down some debt if you have any.", risk: "Expensive, slow, team tired (morale −3). Only ~90 early sign-ups.",
+    apply(S, c) { S.launched = true; c.stat("quality", 14); c.stat("morale", -3); c.stat("investor", 2); S.features += 1;
+      const rep = c.repair(1); const k = c.regs(90, 0.05); S.flags.launchStyle = "polish";
+      return "The launch is later but smooth. " + k + " early users register and most complete their first catalogue." + (rep ? " You also repaired part of the technical debt." : ""); } },
+  { id: "pilot", emoji: "🧪", title: "Run a small pilot with 10 shops", kind: "other", base: 90000, cat: "research", payLabel: "Pilot programme (shop visits, training, support)",
+    desc: "Hand-hold ten friendly shops in Surulere and Ikeja, learn fast and fix problems quietly.",
+    gain: "Trust +6, quality +5, pilot users are very engaged.", risk: "Only 40 sign-ups: small, slow start.",
+    apply(S, c) { S.launched = true; c.stat("trust", 6); c.stat("quality", 5); c.stat("morale", 2); S.flags.validated = true; S.flags.launchStyle = "pilot";
+      const k = c.regs(40, 0.30);
+      return "Ten shops get daily WhatsApp support from Ada and you. " + k + " people register, and your pilot users actually use it. Their testimonials will be gold."; } }
+] },
+
+/* ---- Month 3 ---- */
+{ title: "Handle customer complaints", scene: "📞 😤 🛠️ 💬",
+  situation: S => ({ headline: S.quality < 55 || S.debt > 0 ? "WhatsApp is on fire — and not in a good way." : "A few grumbles, but nothing you can't handle.",
+    text: (S.quality < 55 || S.debt > 0
+      ? "Orders fail at checkout when the network drops, and a shop owner posted a long voice note about it. "
+      : "Merchants like the product but keep asking for stock tracking and a WhatsApp catalogue. ")
+      + "Customer trust is " + S.trust + "/100. What gets your limited attention?" }),
+  options: S => [
+  { id: "fixbugs", emoji: "🔧", title: "Fix the bugs first", kind: "dev", base: 200000, cat: "product", payLabel: "Bug fixing and testing",
+    desc: "Pause new work and stabilise checkout, offline handling and payment confirmations.",
+    gain: "Quality +8, trust +6. Repays one unit of technical debt if you have it.", risk: "Team overworked (morale −3); no new growth this month.",
+    apply(S, c) { c.stat("quality", 8); c.stat("trust", 6); c.stat("morale", -3); const rep = c.repair(1);
+      c.later.push((S2, c2) => { if (S2.effects.churnRisk === "active" && S2.quality >= 60 && S2.trust >= 50) c2.setEffect("churnRisk", "resolved", "Your fixes restored quality and trust."); });
+      return "Tunde and Ada triage the complaint list for two weeks. Checkout stops failing and merchants notice." + (rep ? " One chunk of technical debt is gone." : ""); } },
+  { id: "features", emoji: "🧩", title: "Add the features customers requested", kind: "dev", base: 280000, cat: "product", payLabel: "Feature development (stock tracking, WhatsApp catalogue)",
+    desc: "Give shops what they asked for: stock tracking and shareable WhatsApp catalogues.",
+    gain: "A feature shipped (cheaper future development, better conversion), trust +2, morale +2.", risk: S.debt > 0 ? "Building on shaky code adds more technical debt." : "Bugs stay unfixed for now.",
+    apply(S, c) { S.features += 1; c.stat("quality", 3); c.stat("trust", 2); c.stat("morale", 2); if (S.debt > 0) S.debt += 1;
+      return "The new catalogue feature lands and shops love sharing it on WhatsApp Status." + (S.debt > 0 ? " But it was bolted onto fragile code, so the debt grows." : ""); } },
+  { id: "acquire", emoji: "📣", title: "Prioritise new customer acquisition", kind: "marketing", base: 160000, cat: "marketing", payLabel: "Marketing campaign (radio, WhatsApp, agents)",
+    desc: "Complaints are noise; growth is oxygen. Spend on a Lagos-wide campaign to bring in new shops.",
+    gain: "About 420 sign-ups (only some will become active) and Growth Momentum.", risk: "Existing customers feel ignored: trust −4 (worse if quality is low).",
+    apply(S, c) { const k = c.regs(420, 0); c.stat("trust", S.quality < 50 ? -6 : -4); c.momentum(); S.flags.lastCampaignMonth = S.month;
+      return k + " people register after your campaign. Whether they stay depends on the product, and the people who complained are not impressed that you looked away."; } }
+] },
+
+/* ---- Month 4 ---- */
+{ title: "Generate revenue", scene: "💸 🧾 🏦 📈",
+  situation: S => ({ headline: "Cash is leaving faster than customers are paying.",
+    text: "You have " + money(S.cash) + " and no revenue model yet. " + S.mau + " active users are enjoying NaijaCart for free. Pick how the company earns money; this choice shapes revenue for the rest of the game and cannot be reversed." }),
+  options: S => [
+  { id: "subscription", emoji: "🔁", title: "Paid subscription (₦3,500 / month)", kind: "dev", base: 60000, cat: "product", payLabel: "Payment gateway and billing set-up",
+    desc: "Charge a flat monthly subscription. Simple, predictable income.",
+    gain: "Highest revenue per paying shop (₦3,500).", risk: "Fewer shops convert; trust −2 for introducing a paywall.",
+    apply(S, c) { S.model = "subscription"; S.price = MODELS.subscription.price; c.stat("trust", -2); c.stat("morale", 2); S.flags.model = "subscription";
+      return "You launch a ₦3,500 monthly plan with card and bank-transfer billing. Some shops grumble, a few sign up immediately. Revenue only counts once someone actually pays."; } },
+  { id: "freemium", emoji: "🎁", title: "Free access + sponsored listings", kind: "dev", base: 90000, cat: "product", payLabel: "Premium tier and sponsored-listing build",
+    desc: "Keep the basics free, sell a ₦1,800 premium plan and earn small sponsored-listing income per active user.",
+    gain: "Trust +2; more shops convert; earns ₦30 per active user.", risk: "Revenue per customer is low; income depends on active users.",
+    apply(S, c) { S.model = "freemium"; S.price = MODELS.freemium.price; c.stat("trust", 2); S.flags.model = "freemium";
+      return "Core features stay free and brands start paying for sponsored listings. Plenty of shops try premium, but each pays less."; } },
+  { id: "commission", emoji: "🧮", title: "Commission on each sale", kind: "dev", base: 110000, cat: "product", payLabel: "Transaction tracking and commission build",
+    desc: "Take a small commission whenever a shop makes a sale through NaijaCart.",
+    gain: "Aligns income with your merchants' success; decent conversion.", risk: "Needs reliable payments; fragile products lose trust fast.",
+    apply(S, c) { S.model = "commission"; S.price = MODELS.commission.price; S.flags.model = "commission"; c.stat("morale", 1);
+      if (S.quality < 55) c.stat("trust", -3);
+      return "NaijaCart now takes a small cut of each sale. Merchants who sell more pay more, and the ones who don't, pay nothing." + (S.quality < 55 ? " Payment hiccups make some merchants nervous (trust −3)." : ""); } }
+] },
+
+/* ---- Month 5 ---- */
+{ title: "Raise funding", scene: "💼 🏦 🤝 ✈️",
+  situation: S => ({ headline: S.cash / opCost(S) < 4 ? "The runway is getting short." : "You can still breathe, but not forever.",
+    text: "Cash is " + money(S.cash) + ". Investor confidence is " + S.investor + "/100. " + (S.flags.termSheet ? "An investor has already hinted at a term sheet. " : "") + "An investor's promise is not cash: you only get money if a deal actually closes." }),
+  options: S => {
+    const p = pitchChance(S), t = seedTerms(S);
+    return [
+    { id: "pitch", emoji: "🎤", title: "Pitch seed investors", kind: "other", base: 80000, cat: "fundraising", payLabel: "Fundraising costs (deck, travel, legal)", key: true,
+      desc: "Take the deck to Lagos angels and funds. You'd raise " + money(CFG.seedAmount) + " in exchange for equity.",
+      gain: "If it closes (" + chance(p) + "): +" + money(CFG.seedAmount) + " cash for ~" + (Math.round(t.p * 1000) / 10) + "% equity; investor confidence up; bigger growth options.",
+      risk: "Costs " + money(80000) + " win or lose. If funded, expectations rise and monthly costs +₦50,000.",
+      requires: S => (S.equity < 35 ? "Your equity is too low to dilute further." : S.effects.funded === "active" ? "You are already funded." : null),
+      apply(S, c) {
+        if (Math.random() < p) {
+          const t2 = seedTerms(S); c.dilute(t2.p); c.receive("Seed investment received (" + (Math.round(t2.p * 1000) / 10) + "% equity issued)", CFG.seedAmount, "funding");
+          S.fundedMonth = S.month; S.flags.funded = true; c.stat("investor", 15); c.stat("morale", 6);
+          c.setEffect("funded", "active", "Investment received."); c.setEffect("investorExpect", "active", "Investors now expect progress.");
+          return "The wire lands. A Lagos seed fund believes in you and takes " + (Math.round(t2.p * 1000) / 10) + "% of the company. Your equity is now " + S.equity + "%. The money is in the bank, and so are the expectations.";
+        }
+        c.stat("investor", 1); c.stat("morale", -2);
+        return "Three meetings, lots of 'send us your numbers', and no cheque. The deck cost money and nobody wired anything. You learn what they want to see next time.";
+      } },
+    { id: "bootstrap", emoji: "🥣", title: "Keep bootstrapping", kind: "other", base: 0, cat: "other",
+      desc: "No outside money. Cut tool subscriptions, renegotiate rent and stay lean.",
+      gain: "Monthly costs permanently −₦30,000. Founder equity stays at " + S.equity + "%.", risk: "Slower growth: morale −4, investor confidence −2.",
+      apply(S, c) { S.opExtra -= 30000; c.stat("morale", -4); c.stat("investor", -2); c.stat("trust", 1); S.flags.lean = true;
+        return "You cancel unused tools, move to a cheaper office in Ikeja and have an honest team talk. Costs fall by ₦30,000 a month. The team accepts it, but nobody is thrilled."; } },
+    { id: "grant", emoji: "🏛️", title: "Apply for a grant + partnership", kind: "other", base: 50000, cat: "fundraising", payLabel: "Grant application and partnership meetings",
+      desc: "Apply to an SME innovation grant and sign up a retailer cooperative as a partner.",
+      gain: "A " + chance(S.quality >= 45 ? 0.55 : 0.3) + " of winning " + money(CFG.grantAmount) + " (no equity given up) plus ~150 partner sign-ups either way.", risk: "The grant may not come.",
+      apply(S, c) {
+        const k = c.regs(150, 0.08); c.stat("trust", 2);
+        if (Math.random() < (S.quality >= 45 ? 0.55 : 0.3)) { c.receive("SME innovation grant received", CFG.grantAmount, "grant"); c.stat("investor", 3);
+          return "The grant committee approves your application and the money arrives. The cooperative brings " + k + " new sign-ups. No equity given up."; }
+        return "The grant goes to another team, but the retailer cooperative still brings " + k + " sign-ups. Not a total loss.";
+      } }
+    ];
+  } },
+
+/* ---- Month 6 ---- */
+{ title: "Grow the user base", scene: "📈 👥 📣 🛵",
+  situation: S => ({ headline: S.effects.funded === "active" ? "Your investors are watching the user chart." : "Time to turn a product into a movement.",
+    text: "You have " + S.registered + " registered users and " + S.mau + " active ones. " + (S.effects.funded === "active" ? "Because you're funded you can scale up, but investors expect visible growth. " : "") + "Registrations are cheap. Active, paying users are not." }),
+  options: S => {
+    const funded = S.effects.funded === "active";
+    return [
+    { id: "paid", emoji: "📢", title: funded ? "Scale campaign (investor-backed)" : "Paid marketing campaign", kind: "marketing", base: funded ? 450000 : 250000, cat: "marketing", payLabel: "Marketing campaign (radio, influencers, WhatsApp, field agents)",
+      desc: funded ? "Use the seed money on a big Lagos + Ibadan campaign." : "Radio jingles, WhatsApp groups and market-day agents across Lagos.",
+      gain: "About " + (funded ? 1800 : 900) + " sign-ups, Growth Momentum.", risk: "Many sign-ups never become active; ad costs are rising.",
+      apply(S, c) { const k = c.regs(funded ? 1800 : 900, 0); c.momentum(); c.stat("trust", -1); if (S.effects.funded === "active") c.stat("investor", 2); S.flags.lastCampaignMonth = S.month;
+        return k + " people register. The sign-up chart looks great on a slide. Who will actually open the app next week is another question."; } },
+    { id: "partner", emoji: "🤝", title: "Partner with retailers and a university hub", kind: "other", base: 120000, cat: "marketing", payLabel: "Partnership programme (events, training, agents)",
+      desc: "Team up with a retailers' association and a campus entrepreneurship hub.",
+      gain: "About 300 sign-ups from engaged communities, trust +5, investor +3, Growth Momentum.", risk: "Slower than ads; you give partners hands-on support.",
+      apply(S, c) { const k = c.regs(300, 0.05); c.stat("trust", 5); c.stat("investor", 3); c.momentum();
+        return "The retailers' association endorses you and the campus hub sends student vendors. " + k + " sign-ups arrive and they arrive with trust attached."; } },
+    { id: "plg", emoji: "🔗", title: "Product-led growth (referrals)", kind: "dev", base: 180000, cat: "product", payLabel: "Referral and share-to-WhatsApp features",
+      desc: "Build referral rewards and 'share your shop' links so happy merchants bring their friends.",
+      gain: "A feature shipped, quality +2, about 350 high-quality sign-ups, Growth Momentum.", risk: "Slower and needs development work.",
+      apply(S, c) { S.features += 1; c.stat("quality", 2); const k = c.regs(350, 0.12); c.momentum();
+        return "Merchants share their shop links on WhatsApp Status and invite friends for airtime rewards. " + k + " sign-ups, and more of them actually use the product."; } }
+    ];
+  } },
+
+/* ---- Month 7 ---- */
+{ title: "Investigate retention", scene: "🔍 📊 🪣 📱",
+  situation: S => ({ headline: "Sign-ups look great. Usage doesn't.",
+    text: S.registered + " people have registered, but only " + S.mau + " were active this month (" + pct(S.registered ? S.mau / S.registered * 100 : 0) + "). "
+      + (S.effects.retentionPressure === "active" ? "Retention Pressure is active: users who don't come back are eroding trust. " : "")
+      + "You can investigate why, push more marketing, or try to monetise the audience you already have." }),
+  options: S => [
+  { id: "analytics", emoji: "📊", title: "Analyse user behaviour", kind: "other", base: 100000, cat: "research", payLabel: "Analytics set-up and user interviews",
+    desc: "Install analytics and interview drop-off users to see exactly where sign-ups go cold.",
+    gain: "Unlocks Product Analytics: onboarding and retention fixes cost 20% less. Trust +1.", risk: "No direct growth this month.",
+    requires: S => (S.effects.analytics === "unlocked" ? "You already have analytics." : null),
+    apply(S, c) { c.setEffect("analytics", "unlocked", "You can now see where users drop off."); c.stat("trust", 1); S.flags.insight = true;
+      const act = S.registered ? Math.round(S.activatedTotal / S.registered * 100) : 0;
+      return "The data is humbling: about " + act + "% of sign-ups ever became active, and most people drop off between registration and creating their first shop. Now you know where to fix it."; } },
+  { id: "marketing", emoji: "📣", title: "Increase marketing", kind: "marketing", base: 280000, cat: "marketing", payLabel: "Marketing campaign",
+    desc: "Double down on acquisition. More sign-ups can't hurt, right?",
+    gain: "About 800 sign-ups and Growth Momentum.", risk: "If onboarding is weak, most won't become active. Trust −1.",
+    apply(S, c) { const k = c.regs(800, 0); c.momentum(); c.stat("trust", -1); S.flags.lastCampaignMonth = S.month;
+      return k + " more people register. Without a better onboarding journey, many will sign up, look around and vanish."; } },
+  { id: "monetise", emoji: "💰", title: "Monetise the new audience", kind: "dev", base: 70000, cat: "product", payLabel: "Pricing and upsell build",
+    desc: "Raise prices about 15% and add upsell prompts for the audience you already have.",
+    gain: "More paying customers this month and ~15% higher price from next month.", risk: "More cancellations (+5 points) and trust −4.",
+    apply(S, c) { S.price = Math.round(S.price * 1.15 / 50) * 50; c.convBoost = 1.4; c.extraChurn += 0.05; c.stat("trust", -4);
+      return "You introduce upsell prompts and a price rise to " + money(S.price) + ". Conversions rise, but a few shop owners complain about the price and some will cancel."; } }
+] },
+
+/* ---- Month 8 ---- */
+{ title: "Fix reliability", scene: "🧱 ⚠️ 🔌 🛠️",
+  situation: S => ({ headline: S.debt > 0 ? "The shortcuts are catching up with you." : "No technical debt, but reliability still matters.",
+    text: (S.debt > 0 ? "Technical debt is active, repairs cost 25% more and the app slows down at peak shopping hours. " : "Your code is healthy, but performance dips when NEPA and the network misbehave. ")
+      + "Product quality is " + S.quality + "/100 and customer trust is " + S.trust + "/100. How much do you invest in making things solid?" }),
+  options: S => [
+  { id: "sprint", emoji: "🏗️", title: "Full reliability sprint", kind: "dev", base: 380000, cat: "product", payLabel: "Reliability sprint (bugs, performance, debt clean-up)", key: true,
+    desc: S.debt > 0 ? "Stop everything, rewrite the worst modules and clear technical debt completely." : "Harden performance, offline mode and error handling. (There's no technical debt to clear.)",
+    gain: "Quality +14, trust +5." + (S.debt > 0 ? " Clears all technical debt." : ""), risk: "Expensive; the team crunches (morale −6).",
+    apply(S, c) { c.stat("quality", 14); c.stat("trust", 5); c.stat("morale", -6); const rep = c.repair(S.debt);
+      c.later.push((S2, c2) => { if (S2.effects.churnRisk === "active" && S2.quality >= 60 && S2.trust >= 50) c2.setEffect("churnRisk", "resolved", "A much more reliable product restored confidence."); });
+      return "Six weeks of crunch. The app stops crashing at peak hours, checkout speeds up and bug reports almost disappear." + (rep ? " The technical debt is finally cleared." : ""); } },
+  { id: "targeted", emoji: "🎯", title: "Targeted fixes", kind: "dev", base: 190000, cat: "product", payLabel: "Targeted bug and performance fixes",
+    desc: "Fix the top ten reliability problems and leave the rest.",
+    gain: "Quality +7, trust +2. Repays one unit of technical debt.", risk: "Some debt may remain. Morale −2.",
+    apply(S, c) { c.stat("quality", 7); c.stat("trust", 2); c.stat("morale", -2); const rep = c.repair(1);
+      c.later.push((S2, c2) => { if (S2.effects.churnRisk === "active" && S2.quality >= 62 && S2.trust >= 55) c2.setEffect("churnRisk", "resolved", "Targeted fixes restored enough confidence."); });
+      return "You fix the ten worst problems. Support tickets drop, though a few older issues are still lurking." + (rep ? " One piece of technical debt is gone." : ""); } },
+  { id: "ship", emoji: "🚢", title: "Ship new features, patch later", kind: "dev", base: 150000, cat: "product", payLabel: "New feature development",
+    desc: "Investors love shiny features. Reliability can wait one more month.",
+    gain: "A feature shipped, investor confidence +3, morale +3.", risk: "Adds technical debt and quality −2.",
+    apply(S, c) { S.features += 1; S.debt += 1; c.stat("quality", -2); c.stat("investor", 3); c.stat("morale", 3);
+      return "The new feature demos beautifully and the team is excited. Under the hood, the fragile parts get more fragile."; } }
+] },
+
+/* ---- Month 9 ---- */
+{ title: "Improve onboarding", scene: "🧭 📲 👩🏾‍🦱 🛍️",
+  situation: S => ({ headline: "Thousands signed up. How many ever sold anything?",
+    text: (S.registered - S.mau) + " registered users did not use NaijaCart this month. " + (S.effects.analytics === "unlocked" ? "Your analytics show most drop off before adding a first product. " : "You suspect many get lost before their first sale. ")
+      + "Choose how to help registered users experience the core benefit." }),
+  options: S => {
+    const dormant = Math.max(0, S.registered - S.mau);
+    const resolveRet = (S2, c2) => { if (S2.effects.retentionPressure === "active" && S2.registered > 0 && S2.mau / S2.registered >= 0.25) c2.setEffect("retentionPressure", "resolved", "Re-engagement lifted the active share above 25%."); };
+    return [
+    { id: "onboarding", emoji: "🧭", title: "Build guided onboarding", kind: "dev", base: 220000, cat: "product", discountable: true, payLabel: "Guided onboarding build (tour, templates, WhatsApp set-up)",
+      desc: "An in-app guide in English and Pidgin takes new users from sign-up to first product listing in minutes.",
+      gain: "Unlocks Guided Onboarding (more sign-ups activate and return), wins back ~8% of dormant users, quality +3.", risk: "Pure investment: costs now, pays later.",
+      requires: S => (S.effects.onboarding === "unlocked" ? "You already built onboarding." : null),
+      apply(S, c) { c.setEffect("onboarding", "unlocked", "A guided path from sign-up to first sale now exists."); c.stat("quality", 3); c.reactivated = Math.round(dormant * 0.08); c.later.push(resolveRet);
+        return "New users now follow a five-step guide: add a product, share your shop, get your first order. About " + c.reactivated + " dormant users return after the update."; } },
+    { id: "whatsapp", emoji: "💬", title: "WhatsApp follow-up campaign", kind: "marketing", base: 90000, cat: "marketing", discountable: true, payLabel: "WhatsApp re-engagement campaign",
+      desc: "Message everyone who signed up and never came back, with a short how-to and a free promotion slot.",
+      gain: "Wins back ~5% of dormant users cheaply, trust +1.", risk: "A short-term fix; the journey itself stays the same.",
+      apply(S, c) { c.reactivated = Math.round(dormant * 0.05); c.stat("trust", 1); c.later.push(resolveRet);
+        return "A friendly WhatsApp message with a one-minute video brings back about " + c.reactivated + " dormant users. It's cheap and helpful, but it won't fix the underlying journey."; } },
+    { id: "agents", emoji: "🧑🏾‍🤝‍🧑🏾", title: "Send agents to set up shops in person", kind: "other", base: 160000, cat: "support", discountable: true, payLabel: "Field agents for in-person shop set-up",
+      desc: "Hire a few field agents to visit shops, add their first products and show them how to take orders.",
+      gain: "Wins back ~6% of dormant users, trust +4, conversion +30% this month.", risk: "Labour-intensive: morale −2.",
+      apply(S, c) { c.reactivated = Math.round(dormant * 0.06); c.stat("trust", 4); c.stat("morale", -2); c.convBoost = 1.3; c.later.push(resolveRet);
+        return "Agents spend the month in Mushin, Ikeja and Ikorodu markets, setting up shops one at a time. About " + c.reactivated + " dormant users return, and shop owners say they finally 'get it'."; } }
+    ];
+  } },
+
+/* ---- Month 10 ---- */
+{ title: "Prove sustainability", scene: "🏆 ⚖️ 📊 🌅",
+  situation: S => ({ headline: "Final month: is this a business or a hobby?",
+    text: "Revenue this month: " + money(S.revenueThisMonth) + " against fixed costs of " + money(opCost(S)) + ". " + (S.effects.investorExpect === "active" ? "Your investors want proof: " + CFG.payTarget + "+ paying customers and " + money(CFG.revTarget) + " monthly revenue. " : "")
+      + "Balance retention, revenue, customer acquisition and investor expectations." }),
+  options: S => {
+    const funded = S.effects.funded === "active";
+    return [
+    { id: "retention", emoji: "🪢", title: "Retention and revenue push", kind: "other", base: 120000, cat: "support", payLabel: "Customer success and loyalty programme",
+      desc: "Reward loyal merchants, call every at-risk customer and offer annual plans.",
+      gain: "Trust +4, cancellations −3 points, conversion +20%. Can resolve churn risk.", risk: "No big growth; morale −1.",
+      apply(S, c) { c.stat("trust", 4); c.stat("morale", -1); c.extraChurn -= 0.03; c.convBoost = 1.2; c.reactivated = Math.round(Math.max(0, S.registered - S.mau) * 0.04);
+        c.later.push((S2, c2) => { if (S2.effects.churnRisk === "active" && S2.quality >= 58 && S2.trust >= 50) c2.setEffect("churnRisk", "resolved", "Loyalty work stopped the cancellations."); });
+        return "You call forty at-risk merchants personally and offer a loyalty month. Several stay, and a few even upgrade."; } },
+    { id: "growth", emoji: "🚀", title: "Growth sprint", kind: "marketing", base: 300000, cat: "marketing", payLabel: "Final growth campaign",
+      desc: "Throw a big campaign at the market to maximise your final numbers.",
+      gain: "About 1,000 sign-ups and Growth Momentum.", risk: "Uses a lot of cash; new sign-ups won't be paying yet.",
+      apply(S, c) { const k = c.regs(1000, 0); c.momentum(); c.stat("trust", -1); c.stat("morale", -1);
+        return k + " new people register in the final month. They'll help your top-line numbers, but only some will become active, and even fewer will pay."; } },
+    funded ? { id: "update", emoji: "📑", title: "Investor update & growth plan", kind: "other", base: 60000, cat: "fundraising", payLabel: "Investor update and audit pack", key: true,
+      desc: "Open your books to your investors with a clear plan. Meet " + CFG.payTarget + "+ paying customers and " + money(CFG.revTarget) + " monthly revenue and expectations are satisfied.",
+      gain: "Investor confidence +8 and Investor Expectations resolved if you hit the targets.", risk: "Miss the targets and confidence −8; expectations stay active.",
+      apply(S, c) { c.later.push((S2, c2) => {
+          if (S2.paying >= CFG.payTarget && S2.revenueThisMonth >= CFG.revTarget) { c2.stat("investor", 8); c2.setEffect("investorExpect", "resolved", "You met the investor targets."); c2.notes.push("You hit the investor targets."); }
+          else { c2.stat("investor", -8); c2.notes.push("You missed the investor targets (" + S2.paying + " paying, " + money(S2.revenueThisMonth) + " revenue). Expectations remain active."); } });
+        return "You present the numbers to your investors with a candid growth plan. The verdict depends on what the numbers actually say."; } }
+    : { id: "acquirers", emoji: "🧑🏾‍💼", title: "Explore acquisition talks", kind: "other", base: 60000, cat: "fundraising", payLabel: "Advisor fees and data-room preparation", key: true,
+      desc: "Quietly show the numbers to regional marketplaces and retail platforms to see who might acquire NaijaCart.",
+      gain: "Investor confidence +5. A real acquisition offer is possible if quality and users are decent.", risk: "Distracts the team: morale −2. Weak numbers get politely ignored.",
+      apply(S, c) { c.stat("investor", 5); c.stat("morale", -2);
+        if (S.quality >= 55 && S.mau >= 150) { S.flags.acqInterest = true; return "A regional marketplace takes the meeting seriously and asks for a follow-up. There's real interest, though nothing is signed."; }
+        return "The meetings are polite but cold. They like the idea, but want more users and a stronger product first."; } }
+    ];
+  } }
+];
+
+/* ---------- 7) Nigerian startup events ---------- */
+const EVENTS = [
+  { id: "generator", title: "⚡ NEPA took light again", weight: S => 10,
+    apply(S, c) { const amt = roundK(rnd(50000, 110000)); c.spend("Generator diesel surge", amt, "infrastructure"); c.stat("morale", -2);
+      return "Light was out for days and diesel jumped again. The generator ate " + money(amt) + " and the team is sweating in the office."; } },
+  { id: "data", title: "🌐 Network outage and costly data", weight: S => (S.launched ? 7 : 0),
+    apply(S, c) { const amt = roundK(rnd(20000, 40000)); c.spend("Extra data bundles and backup connection", amt, "infrastructure"); c.stat("trust", -2);
+      return "A telecom outage hits Lagos for two days. You pay " + money(amt) + " for emergency data, and some merchants couldn't take orders."; } },
+  { id: "payments", title: "💳 Failed digital payments", weight: S => (S.paying > 0 ? 9 : 0),
+    pre(S, c) { c.revMult *= rnd(85, 93) / 100; },
+    apply(S, c) { c.stat("trust", -2); return "Bank transfers kept failing mid-month. About " + money(c.revenueLost) + " of expected subscription revenue was delayed or lost, and a few customers lost patience."; } },
+  { id: "cac", title: "📈 Advertising costs spike", weight: S => (S.month >= 3 && !S.flags.cacUp ? 6 : 0),
+    apply(S, c) { S.flags.cacUp = true; return "Facebook and radio rates jump. Marketing now costs 20% more for the rest of the game."; } },
+  { id: "competitor", title: "🥊 A competitor launches", weight: S => (S.launched && !S.flags.competitor && S.month >= 3 ? 7 : 0),
+    apply(S, c) { S.flags.competitor = true; c.stat("trust", S.quality >= 70 ? 0 : -2); c.stat("investor", -3);
+      return "A well-funded rival launches a near-identical product with a loud ad campaign. New sign-ups are now 10% harder to win and fewer convert to active users."; } },
+  { id: "resign", title: "👋 A key developer resigns", weight: S => (S.month >= 2 ? 5 + (S.morale < 55 ? 8 : 0) : 0),
+    apply(S, c) { c.stat("morale", -7); c.stat("quality", -2); c.spend("Recruiting and handover", 60000, "hiring");
+      return "Tunde gets a relocation offer abroad. You pay " + money(60000) + " to hire and onboard a replacement, and the team's mood dips."; } },
+  { id: "cofounder", title: "😠 Co-founder disagreement", weight: S => (S.flags.cofounder ? 8 : 0),
+    apply(S, c) { c.stat("morale", -5); c.stat("quality", -2);
+      return "You and Ada argue about priorities after a long week. It's resolved over suya, but not before it cost focus."; } },
+  { id: "bug", title: "🐞 A product bug hits customers", weight: S => (S.launched ? 5 + S.debt * 8 + (S.quality < 50 ? 5 : 0) : 0),
+    apply(S, c) { c.stat("quality", -4); c.stat("trust", -5); c.spend("Emergency hotfix", 40000, "product"); c.cancel += Math.round(S.paying * 0.05);
+      return "An update breaks checkout for six hours. You pay " + money(40000) + " for a hotfix, and some paying customers cancel."; } },
+  { id: "ghost", title: "👻 Ghost sign-ups", weight: S => (S.flags.lastCampaignMonth === S.month - 1 ? 10 : 0),
+    apply(S, c) { c.returnPenalty += 0.15; return "Last month's campaign brought registrations but few active users. Many never opened the app after signing up, and fewer people return this month."; } },
+  { id: "cancel", title: "📉 Subscription cancellations", weight: S => (S.paying >= 3 ? (S.effects.churnRisk === "active" ? 14 : 3) : 0),
+    apply(S, c) { c.cancel += Math.max(1, Math.round(S.paying * 0.10)); c.stat("trust", -2);
+      return "A group of shops cancels, citing missed orders and slow support." + (S.effects.churnRisk === "active" ? " Churn risk made this far more likely." : ""); } },
+  { id: "investorinterest", title: "👀 Investor interest", weight: S => (S.effects.funded !== "active" && S.investor >= 35 && S.mau >= 30 && !S.flags.investorInterest && S.month <= 6 ? 8 : 0),
+    apply(S, c) { S.flags.investorInterest = true; c.stat("investor", 6); return "An angel investor saw your traction and asks for a call. It is interest, not cash, but it improves your chances if you pitch."; } },
+  { id: "termsheet", title: "📝 An investor wants equity", weight: S => (S.effects.funded !== "active" && S.flags.investorInterest && !S.flags.termSheet && S.month <= 7 ? 10 : 0),
+    apply(S, c) { S.flags.termSheet = true; c.stat("investor", 3); return "The angel hints at a term sheet in exchange for equity. Nothing is signed, but a future pitch would now get better odds and a better valuation."; } },
+  { id: "discount", title: "🏬 Big customer wants a discount", weight: S => (S.paying >= 5 ? 6 : 0),
+    pre(S, c) { c.revMult *= 0.9; },
+    apply(S, c) { c.stat("trust", 2); c.stat("investor", 1); return "A chain of supermarkets agrees to be a flagship customer if you cut their price by 10%. You accept: revenue is lower this month, but the logo helps your credibility."; } },
+  { id: "partnership", title: "🤝 Partnership opportunity", weight: S => (S.launched && S.quality >= 45 && !S.flags.partnership ? 6 : 0),
+    apply(S, c) { S.flags.partnership = true; const k = c.regs(150, 0.05); c.stat("trust", 3); c.stat("investor", 2);
+      return "A Lagos university business hub invites you to onboard its student vendors. " + k + " sign-ups arrive at no cost."; } },
+  { id: "acquirer", title: "🧲 An acquirer calls", weight: S => (S.month >= 8 && S.quality >= 60 && S.trust >= 45 && S.mau >= 120 && !S.flags.acqInterest ? 7 : 0),
+    apply(S, c) { S.flags.acqInterest = true; c.stat("investor", 4); return "A regional e-commerce company asks for a coffee meeting. They aren't offering anything yet, but they are watching you."; } }
+];
+function pickEvent(S) {
+  const last = S.eventLog[S.eventLog.length - 1];
+  const pool = EVENTS.map(e => ({ id: e.id, w: e.id === last ? 0 : Math.max(0, e.weight(S)) })).filter(x => x.w > 0);
+  const none = 8;
+  const total = pool.reduce((s, x) => s + x.w, none);
+  let r = Math.random() * total;
+  for (const x of pool) { r -= x.w; if (r < 0) return x.id; }
+  return null;
+}
+
+/* ---------- 8) endings & report ---------- */
+function calculateEnding(S) {
+  const op = opCost(S), rev = S.revenueThisMonth;
+  const m = {
+    crisis: S.crisis || (S.cash < op && rev < op),
+    profitable: rev >= op * 1.05 && S.cash >= op * 2 && S.trust >= 40 && S.quality >= 55,
+    breakout: S.quality >= 66 && S.trust >= 45 && S.investor >= 40 && S.paying >= 100 && S.mau >= 180 && S.cash >= 300000,
+    unicorn: S.quality >= 75 && S.trust >= 50 && S.investor >= 55 && S.paying >= 180 && S.mau >= 300 && rev >= op * 2 && S.cash >= 800000
+      && S.effects.techDebt !== "active" && S.effects.churnRisk !== "active" && S.flags.funded,
+    acquisition: !!S.flags.acqInterest && S.quality >= 55 && S.trust >= 40 && S.mau >= 120
+  };
+  const E = {
+    unicorn: { id: "unicorn", emoji: "🦄", title: "Unicorn Dream", text: "Product, trust, revenue, cash and credibility all line up. Investors across Lagos, Nairobi and London start talking about a path to a billion-dollar valuation, because the numbers back it up. It's still a dream, but a dream with receipts." },
+    breakout: { id: "breakout", emoji: "🚀", title: "Breakout Startup", text: "Strong product, growing customer base and real momentum. NaijaCart is the startup people in Lagos tech circles now name when they talk about who's next." },
+    profitable: { id: "profitable", emoji: "🌱", title: "Profitable Builder", text: "Revenue now covers your costs and cash is healthy. No billion-dollar hype needed: this is a sustainable Nigerian business that can keep growing at its own pace." },
+    acquisition: { id: "acquisition", emoji: "🤝", title: "Acquisition Opportunity", text: "A regional marketplace wants to buy NaijaCart. The business isn't self-sustaining yet, but your users and product are attractive. You can sell, or keep fighting." },
+    promising: { id: "promising", emoji: "🌤️", title: "Promising but Unproven", text: "Some real traction, some real customers, and some real weaknesses. NaijaCart is alive, but not yet proven. Another year could go either way." },
+    crisis: { id: "crisis", emoji: "🚨", title: "Cash Crisis", text: S.crisis ? "You could not pay the bills in time. Salaries, power and data went unpaid, and the business cannot continue." : "Cash is almost gone and revenue doesn't cover costs. Without a rescue, NaijaCart can't keep operating." }
+  };
+  if (m.crisis) return E.crisis;
+  if (m.unicorn) return E.unicorn;
+  if (m.breakout) return E.breakout;
+  if (m.profitable) return E.profitable;
+  if (m.acquisition) return E.acquisition;
+  return E.promising;
+}
+function topDecisions(S) {
+  return S.decisions.slice().sort((a, b) => b.importance - a.importance).slice(0, 3).sort((a, b) => a.month - b.month);
+}
+function founderAssessment(S) {
+  const e = S.ending ? S.ending.id : "promising";
+  const base = {
+    unicorn: "Boss, na you be the main character. Ten months, zero shortcuts, and the whole ecosystem is on your WhatsApp. Please stay humble.",
+    breakout: "Oga, you cooked. The product works, the users stay and the investors keep calling. Now just don't forget to sleep.",
+    profitable: "You built a real business with real revenue. Not flashy, not loud, but your accountant loves you.",
+    acquisition: "You turned a small idea into something a bigger company wants. Sell, or keep building: the choice is a nice problem to have.",
+    promising: "You survived, which in this economy is already a flex. The ideas are good; the execution needs a little more time and discipline.",
+    crisis: "Na wa o. The idea was fine, but the cash ran out before the customers arrived. Learn, regroup and try again with a leaner plan."
+  }[e];
+  const extra = [];
+  if (S.effects.techDebt === "active") extra.push("Your codebase still runs on 'we'll fix it later'.");
+  if (S.effects.techDebt === "resolved") extra.push("You cleaned your technical debt, a rare act of discipline.");
+  if (S.effects.churnRisk === "active") extra.push("Customers are still quietly cancelling.");
+  if (S.equity < 70) extra.push("You gave away a lot of equity. Hope it was worth it.");
+  if (S.equity === 100) extra.push("You still own 100%. Lonely, but proud.");
+  return base + (extra.length ? " " + extra[0] : "");
+}
+function reportText(S) {
+  const e = S.ending || calculateEnding(S);
+  const L = [];
+  L.push("STARTUP NAIJA — FOUNDER REPORT");
+  L.push("Company: " + S.company + "  |  Outcome: " + e.title);
+  L.push("Final cash: " + money(S.cash) + "  |  Total revenue: " + money(S.totalRevenue) + "  |  Total spent: " + money(S.totalSpent) + "  |  Funding received: " + money(S.totalFunding));
+  L.push("Quality " + S.quality + " | Trust " + S.trust + " | Morale " + S.morale + " | Investors " + S.investor + " | Founder equity " + S.equity + "%");
+  L.push("Registered " + S.registered + " | Active " + S.mau + " | Paying " + S.paying);
+  const eff = Object.keys(S.effects).map(id => EFFECTS[id].name + " (" + S.effects[id] + ")");
+  L.push("Key effects: " + (eff.length ? eff.join(", ") : "none"));
+  L.push("Key decisions: " + topDecisions(S).map(d => "M" + d.month + " " + d.title).join("; "));
+  L.push(founderAssessment(S));
+  return L.join("\n");
+}
+
+/* ---------- 9) save & restore ---------- */
+function saveGame() {
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, state })); return true; } catch (e) { return false; }
+}
+function validState(s) {
+  if (!s || typeof s !== "object" || s.v !== 1) return false;
+  const nums = ["month", "cash", "quality", "trust", "morale", "investor", "equity", "registered", "mau", "returning", "paying", "totalRevenue", "totalSpent"];
+  if (!nums.every(k => Number.isFinite(s[k]))) return false;
+  if (s.month < 1 || s.month > MAX_MONTH || s.cash < 0 || s.equity < 0 || s.equity > 100) return false;
+  if (!["decision", "result", "ended"].includes(s.phase)) return false;
+  if (!s.effects || !s.flags || !Array.isArray(s.history) || !Array.isArray(s.decisions) || !Array.isArray(s.eventLog) || !Array.isArray(s.achievements)) return false;
+  if (s.phase === "decision" && !s.currentEvent) return false;
+  if (s.phase === "result" && !s.result) return false;
+  if (s.phase === "ended" && !s.ending) return false;
+  return true;
+}
+function restoreGame() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return false;
+    const o = JSON.parse(raw);
+    if (!o || !validState(o.state)) return false;
+    state = o.state; normalize(state);
+    return true;
+  } catch (e) { return false; }
+}
+function clearSave() { try { localStorage.removeItem(SAVE_KEY); } catch (e) {} }
+
+/* ---------- 10) rendering ---------- */
+const root = document.getElementById("app");
+
+function barClass(v) { return v >= 60 ? "g" : v >= 35 ? "a" : "r"; }
+
+function renderDashboard(S) {
+  const runway = S.cash / opCost(S);
+  const cashCls = runway < 2 ? "low" : runway < 4 ? "mid" : "ok";
+  const risks = [];
+  Object.keys(S.effects).forEach(id => { if (EFFECTS[id].type === "risk" && S.effects[id] === "active") risks.push({ t: EFFECTS[id].icon + " " + EFFECTS[id].name, c: id === "techDebt" || id === "churnRisk" ? "red" : "amber" }); });
+  if (runway < 2) risks.push({ t: "⏳ Less than 2 months of cash", c: "red" });
+  if (S.morale < 35) risks.push({ t: "😮‍💨 Team burnout risk", c: "red" });
+  if (S.flags.competitor) risks.push({ t: "🥊 Competitor in market", c: "amber" });
+  if (S.flags.cacUp) risks.push({ t: "📈 Ads cost +20%", c: "amber" });
+  const ach = ACHIEVEMENTS.filter(a => S.achievements.includes(a.id));
+  const act = S.registered ? Math.round(S.activatedTotal / S.registered * 100) + "%" : null;
+  const nm = '<b class="nm">Not yet measured</b>';
+  const effList = Object.keys(S.effects).map(id => {
+    const st = S.effects[id], M = EFFECTS[id];
+    return '<div class="eff"><b>' + M.icon + " " + M.name + '</b><span class="badge ' + st + '">' + st + "</span><p>" + M.text + "</p><p><i>Effect:</i> " + M.mech + "</p></div>";
+  }).join("");
+  return `
+  <div class="company">
+    <div class="card bizname"><div class="bizicon">🛒</div><div><h2>${esc(S.company)}</h2><p>${esc(S.idea)}</p></div></div>
+    <div class="card cash"><div class="label">💰 Cash balance</div><div class="amt ${cashCls}">${money(S.cash)}</div>
+      <div class="sub">Fixed costs ${money(opCost(S))}/month · about ${runway.toFixed(1)} months of runway</div></div>
+  </div>
+  <div class="grid">
+    <div class="card"><h3>📊 Company stats</h3>
+      ${STAT_META.map(m => `<div class="stat"><div class="row"><span>${m.icon} ${m.label}</span><span>${S[m.k]}/100</span></div><div class="bar"><span class="${barClass(S[m.k])}" style="width:${S[m.k]}%"></span></div></div>`).join("")}
+      <div class="equity"><span>🧾 Founder equity</span><b>${S.equity}%</b></div></div>
+    <div class="card"><h3>👥 Customers &amp; revenue</h3><div class="metrics">
+      <div class="metric"><small>Registered users (sign-ups)</small><b>${S.registered}</b></div>
+      <div class="metric"><small>Active customers (monthly)</small>${S.launched ? "<b>" + S.mau + "</b>" : nm}</div>
+      <div class="metric"><small>Returning users</small>${S.measuredReturning ? "<b>" + S.returning + "</b>" : nm}</div>
+      <div class="metric"><small>Paying customers</small><b>${S.paying}</b></div>
+      <div class="metric"><small>Revenue last month</small><b>${money(S.revenueThisMonth)}</b></div>
+      <div class="metric"><small>Paying-customer retention</small>${S.retentionRate == null ? nm : "<b>" + S.retentionRate + "%</b>"}</div>
+      <div class="metric"><small>Sign-up → active rate</small>${act ? "<b>" + act + "</b>" : nm}</div>
+      <div class="metric"><small>Total revenue so far</small><b>${money(S.totalRevenue)}</b></div></div></div>
+    <div class="card"><h3>⚠️ Risks &amp; 🏅 achievements</h3>
+      <div class="mini">Active risks</div><div class="chips">${risks.length ? risks.map(r => `<span class="chip ${r.c}">${r.t}</span>`).join("") : '<span class="chip green">✅ No major risks</span>'}</div>
+      <div class="mini">Achievements</div><div class="chips">${ach.length ? ach.map(a => `<span class="chip green">${a.icon} ${a.name}</span>`).join("") : '<span class="chip grey">None yet</span>'}</div>
+      <details><summary>Persistent effects (${Object.keys(S.effects).length})</summary>${effList || '<p class="eff">None yet. Your decisions will create them.</p>'}</details></div>
+  </div>`;
+}
+
+function renderMonthlyEvent(S) {
+  const R = ROUNDS[S.month - 1], sit = R.situation(S), opts = getOptions(S);
+  return `
+  <div class="card challenge"><div class="scene">${R.scene}</div>
+    <div class="mini">Month ${S.month}: ${R.title}</div>
+    <h2>${sit.headline}</h2><p>${sit.text}</p>
+    <div class="facts">${facts(S).map(f => `<span class="chip ${f.c}">${esc(f.t)}</span>`).join("")}</div></div>
+  <div class="decisions">${opts.map(o => `
+    <div class="card dcard ${o.reason ? "off" : ""}"><div class="em">${o.emoji}</div><h4>${o.title}</h4><p>${o.desc}</p>
+      <div class="cost">${o.cost > 0 ? "💸 Cost: " + money(o.cost) : "🆓 Cost: free"}</div>
+      <div class="gain">✅ ${val(o.gain, S)}</div><div class="risk">⚠️ ${val(o.risk, S)}</div>
+      ${o.reason ? `<div class="why">🔒 ${o.reason}</div>` : ""}
+      <button class="btn" data-act="choose" data-id="${o.id}" ${o.reason ? "disabled" : ""}>Choose this</button></div>`).join("")}</div>`;
+}
+
+function deltaRow(label, a, b, fmt, goodUp) {
+  const d = b - a; fmt = fmt || (x => x);
+  const cls = d === 0 ? "flat" : ((d > 0) === (goodUp !== false) ? "up" : "down");
+  return `<div class="delta"><span>${label}</span><span>${fmt(a)} → ${fmt(b)} <b class="${cls}">${d === 0 ? "no change" : signed(d)}</b></span></div>`;
+}
+function renderResult(S) {
+  const r = S.result, L = r.ledger, A = r.before, B = r.after;
+  const rows = L.items.map(i => `<tr><td class="${i.type === "in" ? "in" : "out"}">${i.type === "in" ? "➕" : "➖"} ${esc(i.label)}${i.unpaid ? ' <small>(' + money(i.unpaid) + " could not be paid)</small>" : ""}</td><td class="${i.type === "in" ? "in" : "out"}">${i.type === "in" ? "+" : "−"}${money(i.amount)}</td></tr>`).join("");
+  const next = S.gameOver ? (r.crisis ? "See what happened" : "See my founder report") : "Continue to Month " + (S.month + 1);
+  const f = r.funnel;
+  const funnel = (f.regs > 0 || f.newPaying > 0 || f.churned > 0) ? `<div class="card"><h3>🔄 From sign-up to paying customer</h3>
+      <div class="funnel"><span class="box">📝 ${f.regs} registered</span>→<span class="box">📱 ${f.activated} became active</span>→<span class="box">💳 ${f.newPaying} new paying</span><span class="box">🚪 ${f.churned} cancelled</span></div>
+      <p style="font-size:.85rem;color:var(--muted);margin:8px 0 0">Registrations are not revenue. Only customers who actually pay add cash, and new customers pay from next month.</p></div>` : "";
+  return `
+  <div class="card result"><div class="mini">Month ${r.month} result</div><h2>${r.emoji} You chose: ${esc(r.title)}</h2><p class="narr">${esc(r.narrative)}</p>
+    ${r.crisis ? '<div class="warn">🚨 The company could not pay all its bills this month. Cash is gone and operations cannot continue.</div>' : ""}</div>
+  <div class="two">
+    <div class="card"><h3>💰 Cash this month</h3><table class="ledger">
+      <tr><td>Opening balance</td><td>${money(L.opening)}</td></tr>${rows}
+      <tr><td>Total cash received</td><td class="in">+${money(L.received)}</td></tr><tr><td>Total cash spent</td><td class="out">−${money(L.spent)}</td></tr>
+      <tr class="sum"><td>Closing balance</td><td>${money(L.closing)}</td></tr></table>
+      <p style="font-size:.8rem;color:var(--muted);margin:6px 0 0">Closing = opening + received − spent</p></div>
+    <div class="card"><h3>📈 What changed</h3>
+      ${STAT_META.map(m => deltaRow(m.icon + " " + m.label, A[m.k], B[m.k])).join("")}
+      ${deltaRow("🧾 Founder equity", A.equity, B.equity, x => x + "%")}
+      ${deltaRow("📝 Registered users", A.registered, B.registered)}
+      ${deltaRow("📱 Active customers", A.mau, B.mau)}
+      ${deltaRow("🔁 Returning users", A.returning, B.returning)}
+      ${deltaRow("💳 Paying customers", A.paying, B.paying)}
+      ${deltaRow("💵 Monthly revenue", A.revenue, B.revenue, money)}</div>
+  </div>
+  ${funnel}
+  ${r.event ? `<div class="card"><h3>📰 This month in Lagos</h3><b>${r.event.title}</b><p>${esc(r.event.text)}</p></div>` : `<div class="card"><h3>📰 This month in Lagos</h3><p>A quiet month: no major surprises.</p></div>`}
+  ${r.notes.length ? `<div class="note">${r.notes.map(n => "• " + esc(n)).join("<br>")}</div>` : ""}
+  <div class="card"><h3>🔗 Persistent effects</h3>${r.effects.length ? r.effects.map(e => `<div class="eff"><b>${e.icon} ${e.name}</b><span class="badge ${e.status}">${e.changed ? (e.from ? e.from + " → " : "new: ") : ""}${e.status}</span><p>${esc(e.note)}</p>${e.changed && e.why ? `<p><i>${esc(e.why)}</i></p>` : ""}</div>`).join("") : "<p>No persistent effects yet. Your decisions will create them.</p>"}</div>
+  ${r.achievements.length ? `<div class="card"><h3>🏅 Achievement unlocked</h3><div class="chips">${r.achievements.map(a => `<span class="chip green">${a.icon} ${a.name}</span>`).join("")}</div></div>` : ""}
+  <div style="margin-top:14px"><button class="btn navy" data-act="next">${next} →</button></div>`;
+}
+
+function renderEnding(S) {
+  const e = S.ending, td = topDecisions(S);
+  const eff = Object.keys(S.effects);
+  const act = S.registered ? Math.round(S.activatedTotal / S.registered * 100) + "%" : "Not yet measured";
+  return `
+  <div class="end"><div class="endbanner"><div class="big">${e.emoji}</div><div class="mini" style="color:#ffd43b">Final outcome</div><h2>${e.title}</h2><p>${e.text}</p></div>
+  <div class="two" style="margin-top:14px">
+    <div class="card"><h3>📋 Founder report: ${esc(S.company)}</h3><div class="rep">
+      <div class="metric"><small>Final cash</small><b>${money(S.cash)}</b></div>
+      <div class="metric"><small>Founder equity</small><b>${S.equity}%</b></div>
+      <div class="metric"><small>Total revenue received</small><b>${money(S.totalRevenue)}</b></div>
+      <div class="metric"><small>Total expenditure</small><b>${money(S.totalSpent)}</b></div>
+      <div class="metric"><small>Funding &amp; grants received</small><b>${money(S.totalFunding)}</b></div>
+      <div class="metric"><small>Sign-up → active rate</small><b>${act}</b></div>
+      <div class="metric"><small>Registered users</small><b>${S.registered}</b></div>
+      <div class="metric"><small>Active users</small><b>${S.mau}</b></div>
+      <div class="metric"><small>Paying customers</small><b>${S.paying}</b></div>
+      <div class="metric"><small>Paying retention</small>${S.retentionRate == null ? '<b class="nm">Not yet measured</b>' : "<b>" + S.retentionRate + "%</b>"}</div></div>
+      ${STAT_META.map(m => `<div class="stat" style="margin-top:10px;text-align:left"><div class="row"><span>${m.icon} ${m.label}</span><span>${S[m.k]}/100</span></div><div class="bar"><span class="${barClass(S[m.k])}" style="width:${S[m.k]}%"></span></div></div>`).join("")}</div>
+    <div class="card" style="text-align:left"><h3>🔗 Key persistent effects</h3>${eff.length ? '<div class="chips">' + eff.map(id => `<span class="chip ${EFFECTS[id].type === "risk" && S.effects[id] === "active" ? "red" : "green"}">${EFFECTS[id].icon} ${EFFECTS[id].name}: ${S.effects[id]}</span>`).join("") + "</div>" : "<p>None.</p>"}
+      <h3 style="margin-top:14px">⭐ Three decisions that mattered</h3><ol class="list">${td.map(d => `<li><b>Month ${d.month}: ${esc(d.title)}.</b> ${esc(d.summary)}</li>`).join("")}</ol>
+      <h3 style="margin-top:14px">🧑🏾‍💼 Founder assessment</h3><p>${esc(founderAssessment(S))}</p></div>
+  </div>
+  <div class="actions"><button class="btn" data-act="copy">📋 Copy Founder Report</button><button class="btn navy" data-act="again">🔁 Play Again</button></div>
+  ${ui.copyMsg ? `<div class="copymsg ${ui.copyOk ? "ok" : "bad"}">${ui.copyMsg}</div>` : ""}
+  ${ui.showText ? `<textarea class="rt" id="rt" readonly>${esc(reportText(S))}</textarea>` : ""}</div>`;
+}
+
+function renderWelcome() {
+  return `
+  <div class="danfo"></div>
+  <div class="welcome"><div class="skyline">🏙️ 🌴 🚌 ⚡ 🏪</div><h1>STARTUP NAIJA</h1><div class="sub">Your idea. Your decisions. Your company.</div>
+    <div class="idea"><b>🛒 Your idea: NaijaCart</b><br>A digital platform that helps small Nigerian retailers sell products online.
+      <label for="companyName" style="display:block;margin-top:12px;font-weight:700">Name your company</label>
+      <input id="companyName" type="text" maxlength="24" value="NaijaCart" autocomplete="off"></div>
+    <div class="how">• 10 months, one decision per month, with consequences that carry forward.<br>• Watch your cash: ${money(START_CASH)} will not last forever.<br>• Sign-ups ≠ active users ≠ paying customers.</div>
+    <button class="btn" data-act="start" style="margin:0 auto">Start My Startup</button></div>
+  <div class="danfo" style="margin-top:14px"></div>`;
+}
+
+function renderModal() {
+  return `<div class="modal" data-act="cancel-bg"><div class="box"><h3>Restart the game?</h3>
+    <p>This will delete your current game and cannot be undone.</p>
+    <div class="row"><button class="btn light" data-act="cancel">Keep playing</button><button class="btn danger" data-act="restart">Yes, restart</button></div></div></div>`;
+}
+
+function render() {
+  if (!state) { root.innerHTML = renderWelcome(); return; }
+  const S = state;
+  const monthLabel = S.phase === "ended" ? "Game over" : "Month " + S.month + " / " + MAX_MONTH;
+  const bar = Array.from({ length: MAX_MONTH }, (_, i) => {
+    const m = i + 1; const done = m < S.month || S.phase === "ended" || (m === S.month && S.phase === "result");
+    return `<i class="${done ? "done" : m === S.month ? "now" : ""}"></i>`;
+  }).join("");
+  let body = "";
+  if (S.phase === "decision") body = renderMonthlyEvent(S);
+  else if (S.phase === "result") body = renderResult(S);
+  else body = renderEnding(S);
+  root.innerHTML = `
+    <div class="top"><div class="logo">STARTUP NAIJA<small>Your idea. Your decisions. Your company.</small></div>
+      <span class="pill">📅 <b>${monthLabel}</b></span><button class="ghost" data-act="ask-restart">↺ Restart</button>
+      <div class="monthbar">${bar}</div></div>
+    <div class="danfo"></div>
+    ${S.phase === "ended" ? "" : renderDashboard(S)}
+    ${body}
+    ${ui.modal ? renderModal() : ""}`;
+  if (S.phase !== "ended") window.scrollTo && window.scrollTo(0, 0);
+}
+
+function copyReport() {
+  const text = reportText(state);
+  const done = ok => {
+    ui.copyOk = ok; ui.showText = !ok;
+    ui.copyMsg = ok ? "✅ Founder report copied to your clipboard." : "⚠️ Couldn't copy automatically. Select the text below and copy it manually.";
+    render();
+  };
+  const fallback = () => {
+    let ok = false;
+    try { const ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.focus(); ta.select(); ok = document.execCommand("copy"); document.body.removeChild(ta); } catch (e) { ok = false; }
+    done(ok);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => done(true), fallback);
+  else fallback();
+}
+
+root.addEventListener("click", e => {
+  const b = e.target.closest("[data-act]");
+  if (!b || b.disabled) return;
+  const a = b.dataset.act;
+  if (a === "start") { const inp = document.getElementById("companyName"); startNewGame(inp ? inp.value : ""); }
+  else if (a === "choose") applyDecision(b.dataset.id);
+  else if (a === "next") continueGame();
+  else if (a === "ask-restart") { ui.modal = true; render(); }
+  else if (a === "cancel-bg") { if (e.target === b) { ui.modal = false; render(); } }
+  else if (a === "cancel") { ui.modal = false; render(); }
+  else if (a === "restart") { ui.modal = false; clearSave(); state = null; ui.copyMsg = ""; ui.showText = false; render(); }
+  else if (a === "again") { clearSave(); state = null; ui.copyMsg = ""; ui.showText = false; render(); }
+  else if (a === "copy") copyReport();
+});
+
+if (!restoreGame()) state = null;
+render();
+</script>
+</body>
+</html>
